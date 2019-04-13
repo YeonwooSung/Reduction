@@ -3,28 +3,30 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class StraightforwardReduction {
 	private BufferedReader br;
-	private FileReader fr;
 	private List<String> comments; //list to store comments
 	private KCol kcol;
 	private SAT sat;
 
 	StraightforwardReduction(String name) {
 		try {
-			fr = new FileReader(new File(name));
-			br = new BufferedReader(fr);
+			if (name == null) {
+				br = new BufferedReader(new InputStreamReader(System.in));
+			} else {
+				br = new BufferedReader(new FileReader(new File(name)));
+			}
 
 			comments = new ArrayList<String>();
 
 			//read the input file
 			this.readAndParse();
 
-			fr.close();
 			br.close();
 
 		} catch (FileNotFoundException e) {
@@ -54,8 +56,10 @@ public class StraightforwardReduction {
 		boolean isCNF = false;
 		boolean shouldBeEmpty = false;
 
-		while (br.ready()) {
-			String line = br.readLine();
+		String line;
+
+		while ((line = br.readLine()) != null) {
+			//String line = br.readLine();
 
 			// check whether the read line is supposed to be a preamble or not
 			if (preamble) {
@@ -139,9 +143,8 @@ public class StraightforwardReduction {
 					sb.append(line);
 
 					// use while loop to read until it gets the end of the file
-					while (br.ready()) {
+					while ((line = br.readLine()) != null) {
 						sb.append("\n");
-						line = br.readLine();
 						sb.append(line);
 					}
 
@@ -212,7 +215,7 @@ public class StraightforwardReduction {
 						kcol.addEndpointTuple(tuple);
 
 						Edge edge = new Edge();
-						edge.setEndPoints(1, 2);
+						edge.setEndPoints(startpoint, endpoint);
 
 						kcol.appendEdge(edge);
 
@@ -231,19 +234,13 @@ public class StraightforwardReduction {
 
 						kcol.appendNode(node);
 
-					} else if (words[0].equals("d")) {
-
-						//TODO optional descriptors
-
 					} else {
 						throw new IOException();
 					}
 				}
-
 			}
 
 		} //while loop ends
-
 
 		if (numOfReadLine != 0 && !shouldBeEmpty) {
 			System.out.println(numOfReadLine); //TODO need to remove this later
@@ -252,84 +249,57 @@ public class StraightforwardReduction {
 			//TODO solution1.cnf -> ok because there are no clauses at all
 		}
 
-		// node without a descriptor will take on a default value 1.
-		//TODO kcol.validateNodes(); -> clique only?
+		if (!isCNF) {
+			if (!kcol.checkNumOfEdges()) {
+				throw new IOException();
+			}
 
-		if (!kcol.checkNumOfEdges()) {
-			throw new IOException();
+			kcol.validateNodes(); //add nodes that are not appended to the KCol instance yet.
 		}
+
 	}
 
+	/**
+	 * Getter for SAT instance.
+	 * @return sat
+	 */
 	public SAT getSAT() {
 		return sat;
 	}
 
+	/**
+	 * Getter for KCol instance.
+	 * @return kcol
+	 */
 	public KCol getKCol() {
 		return kcol;
 	}
 
-	public ThreeSAT convertSAT_to_3SAT() {
-		ThreeSAT sat3 = new ThreeSAT();
-
-		int numOfClauses = sat.countNumOfClauses();
-
-		for (int i = 0; i < numOfClauses; i++) {
-			Clause clause = sat.getClause(i);
-
-			int numOfVariables = clause.countVariables();
-
-			if (numOfVariables <= 3) {
-				sat3.appendClause(clause);
-			} else {
-
-				int offset = 1;
-
-				Clause newClause = new Clause();
-				newClause.appendVariable(clause.getVariable(0));
-				newClause.appendVariable(clause.getVariable(1));
-				newClause.appendVariable(new Variable(sat.countNumOfClauses() + offset));
-				newClause.appendVariable(null);
-
-				sat3.appendClause(newClause);
-
-				int limit = numOfVariables - 1;
-
-				for (int j = 2; j < numOfVariables; j++) {
-					newClause = new Clause();
-
-					int newVal = -1 * (sat.countNumOfClauses() + offset++);
-					newClause.appendVariable(new Variable(newVal));
-
-					newClause.appendVariable(clause.getVariable(j));
-
-					if (j < limit) {
-						System.out.println(sat.countNumOfClauses() + offset);
-						newClause.appendVariable(new Variable(sat.countNumOfClauses() + offset));
-					}
-
-					newClause.appendVariable(null);
-					sat3.appendClause(newClause);
-				}
-			}
-		}
-
-		return sat3;
-	}
 
 	/*
 	 * TODO comment!
 	 */
 	public static void main(String[] args) {
-		StraightforwardReduction reduction = new StraightforwardReduction("test_ok.cnf");
+//		StraightforwardReduction reduction1 = new StraightforwardReduction("test_ok.cnf");
+//
+//		System.out.println("yes");
+//
+//		SAT sat = reduction1.getSAT();
+//		sat.printClauses();
+//
+//		System.out.println("yes");
+//
+//		ThreeSAT sat3 = reduction1.convertSAT_to_3SAT();
+//		System.out.println("haha");
+//
+		StraightforwardReduction reduction2 = new StraightforwardReduction("test.col");
+		System.out.println("col test start");
 
-		System.out.println("yes");
-
-		reduction.getSAT().printClauses();
-
-		System.out.println("yes");
-
-		ThreeSAT sat3 = reduction.convertSAT_to_3SAT();
-		System.out.println("haha");
+		KCol kcol = reduction2.getKCol();
+		kcol.printNodes();
+		kcol.printEdges();
+		SAT newsat = kcol.convert_kcol_to_sat();
+		newsat.printClauses();
 
 		//If the program success, it should exit with exit code 0.
 		System.exit(0);

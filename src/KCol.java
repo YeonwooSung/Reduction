@@ -24,12 +24,93 @@ public class KCol {
 		ids = new ArrayList<Integer>();
 	}
 
+	public SAT convert_kcol_to_sat() {
+		SAT sat = new SAT();
+
+		int numOfVariables = numOfCol * numOfNodes; //num of variables = (num of nodes) * (num of colours)
+
+		sat.setNumOfVariables(numOfVariables); // set number of variables
+
+		// combination of n_C_2, where n is the number of colours.
+		ArrayList<ArrayList<Integer>> combination = Combination.makeCombinition(numOfCol);
+
+
+		for (int i = 1; i <= numOfNodes; i++) { //to check all nodes
+			int val = i;
+			Clause clause = new Clause();
+
+			/*
+			 * Use for loop to generate and append 'At-least-once' clauses to the SAT object.
+			 * A single clause for each node i, which says that each node has to have
+			 * at least one colour.
+			 */
+			for (int j = 0; j++ < numOfCol; val += numOfNodes) { //to check all colors
+				clause.appendVariable(new Variable(val));
+			}
+
+			sat.appendClause(clause); //append a generated clause to sat instance
+
+			val = i;
+
+			/*
+			 * Use for loop to generate and append 'At-most-once' clauses to the SAT object.
+			 * A clause for every node and pair j1 j2 of colours.
+			 * The clause should say that node i can't be both colour j1 and colour j2.
+			 */
+			for (int j = 0; j < combination.size(); j++) {
+				/*
+				 * Use combination to check all posible combination of colours.
+				 */
+				ArrayList<Integer> al = combination.get(j);
+				clause = new Clause();
+
+				for (int k = 0; k < al.size(); k++) {
+					int not_val = - ((al.get(k) - 1) * numOfNodes + i);
+					clause.appendVariable(new Variable(not_val));
+				}
+				sat.appendClause(clause);
+			}
+		}
+
+		/*
+		 * Use for loop to generate and append 'edge' clauses.
+		 */
+		for (int j = 0; j < numOfEdges; j++) {
+			Edge edge = edges.get(j);
+			Clause clause = new Clause();
+
+			int start = - edge.getStartPoint();
+			int end = - edge.getEndPoint();
+
+			for (int k = 0; k < numOfCol; k++) {
+				clause.appendVariable(new Variable(start));
+				clause.appendVariable(new Variable(end));
+
+				start -= numOfNodes;
+				end -= numOfNodes;
+			}
+			sat.appendClause(clause);
+		}
+		sat.setNumOfClauses(sat.countNumOfClauses()); //set number of clauses
+
+		return sat;
+	}
+
 	/**
 	 * Add a new tuple string that contains the end points.
 	 * @param tuple
 	 */
 	public void addEndpointTuple(String tuple) {
 		endpoints.add(tuple);
+	}
+
+	/**
+	 * Get the specific node from list.
+	 * @param index The index of the node.
+	 * @return the node
+	 */
+	public Node getNode(int index) {
+		return nodes.get(index);
 	}
 
 	/**
@@ -204,15 +285,35 @@ public class KCol {
 				} else {
 					i++;
 				}
-
 				index++;
 			}
 
-			//if ids.size is less than numOfNodes
+			//if ids.size() is less than numOfNodes
 			for (; index <= numOfNodes; index++) {
 				nodes.add(new Node(index, 1));
 			}
 		}
 	}
 
+	/**
+	 * Print out nodes in the list.
+	 */
+	public void printNodes() {
+		Node[] nodeArr = nodes.stream().toArray(Node[]::new);
+		for (Node n : nodeArr) {
+			System.out.print(n.getId() + " ");
+		}
+		System.out.println();
+	}
+
+	/**
+	 * Print out edges in the list.
+	 */
+	public void printEdges() {
+		Edge[] edgeArr = edges.stream().toArray(Edge[]::new);
+		for (Edge e : edgeArr) {
+			System.out.print("<" + e.getStartPoint() + "," + e.getEndPoint() + ">");
+		}
+		System.out.println();
+	}
 }

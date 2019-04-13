@@ -4,7 +4,9 @@ public class Node {
 	private int id;
 	private int value;
 
-	Node() {}
+	Node() {
+		this.setValue(1);
+	}
 
 	Node(int id, int value) {
 		this.setId(id);

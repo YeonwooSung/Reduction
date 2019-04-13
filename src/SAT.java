@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class SAT {
 
 	private int numOfClauses;
@@ -81,4 +80,55 @@ public class SAT {
 		this.numOfVariables = numOfVariables;
 	}
 
+	/**
+	 * Convert SAT to 3-SAT.
+	 * @return ThreeSAT (3-SAT) instance
+	 */
+	public ThreeSAT convertSAT_to_3SAT() {
+		ThreeSAT sat3 = new ThreeSAT();
+
+		int numOfClauses = this.countNumOfClauses();
+
+		for (int i = 0; i < numOfClauses; i++) {
+			Clause clause = this.getClause(i);
+
+			int numOfVariables = clause.countVariables();
+
+			if (numOfVariables <= 3) {
+				sat3.appendClause(clause);
+			} else {
+
+				int offset = 1;
+
+				Clause newClause = new Clause();
+				newClause.appendVariable(clause.getVariable(0));
+				newClause.appendVariable(clause.getVariable(1));
+				newClause.appendVariable(new Variable(this.countNumOfClauses() + offset));
+				newClause.appendVariable(null);
+
+				sat3.appendClause(newClause);
+
+				int limit = numOfVariables - 1;
+
+				for (int j = 2; j < numOfVariables; j++) {
+					newClause = new Clause();
+
+					int newVal = -1 * (this.countNumOfClauses() + offset++);
+					newClause.appendVariable(new Variable(newVal));
+
+					newClause.appendVariable(clause.getVariable(j));
+
+					if (j < limit) {
+						System.out.println(this.countNumOfClauses() + offset);
+						newClause.appendVariable(new Variable(this.countNumOfClauses() + offset));
+					}
+
+					newClause.appendVariable(null);
+					sat3.appendClause(newClause);
+				}
+			}
+		}
+
+		return sat3;
+	}
 }
