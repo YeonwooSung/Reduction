@@ -9,7 +9,7 @@ public class SAT {
 	private final int ZERO = 0;
 	private int numOfClauses;
 	private int numOfVariables;
-	private boolean hasEmptyClause; // to check if sat has an empty clause
+	private boolean hasEmptyClause; //to check if sat has an empty clause
 
 	private List<Clause> clauses;
 
@@ -20,7 +20,6 @@ public class SAT {
 
 	/**
 	 * Get specific clause from the list.
-	 * 
 	 * @param index The index of the clause.
 	 * @return the clause
 	 */
@@ -30,7 +29,6 @@ public class SAT {
 
 	/**
 	 * Add clause object to the list of clauses.
-	 * 
 	 * @param clause
 	 */
 	public void appendClause(Clause clause) {
@@ -50,7 +48,6 @@ public class SAT {
 
 	/**
 	 * Count the number of clauses in the list of clauses.
-	 * 
 	 * @return clauses.size()
 	 */
 	public int countNumOfClauses() {
@@ -59,7 +56,6 @@ public class SAT {
 
 	/**
 	 * Getter for numOfClauses.
-	 * 
 	 * @return the numOfClauses
 	 */
 	public int getNumOfClauses() {
@@ -68,7 +64,6 @@ public class SAT {
 
 	/**
 	 * Setter for numOfClauses.
-	 * 
 	 * @param numOfClauses the numOfClauses to set
 	 */
 	public void setNumOfClauses(int numOfClauses) {
@@ -77,7 +72,6 @@ public class SAT {
 
 	/**
 	 * Getter for numOfVariables.
-	 * 
 	 * @return the numOfVariables
 	 */
 	public int getNumOfVariables() {
@@ -86,7 +80,6 @@ public class SAT {
 
 	/**
 	 * Setter for numOfVariables.
-	 * 
 	 * @param numOfVariables the numOfVariables to set
 	 */
 	public void setNumOfVariables(int numOfVariables) {
@@ -95,7 +88,6 @@ public class SAT {
 
 	/**
 	 * Convert SAT to 3-SAT.
-	 * 
 	 * @return ThreeSAT (3-SAT) instance
 	 */
 	public ThreeSAT convertSAT_to_3SAT() {
@@ -117,11 +109,11 @@ public class SAT {
 				if (!this.hasEmptyClause) {
 					// check if this clause if an empty clause
 					if (clause.countVariables() > 0 && clause.getVariable(0) != null)
-						if (clause.countVariables() > 1)
-							totalNumOfClauses += 1;
+						totalNumOfClauses += 1;
 				} else {
-					// check if the number of clauses of the SAT object is 1.
+					//check if the number of clauses of the SAT object is 1.
 					if (this.getNumOfClauses() == 1) {
+						//TODO ????
 						totalNumOfClauses = 1;
 					} else {
 						totalNumOfClauses += 1;
@@ -145,7 +137,7 @@ public class SAT {
 					newClause = new Clause();
 
 					int sum = this.getNumOfVariables() + offset++;
-					int newVal = -sum;
+					int newVal = - sum;
 					newClause.appendVariable(new Variable(newVal));
 
 					sat3.setNumOfVariables(sum);
@@ -173,7 +165,6 @@ public class SAT {
 
 	/**
 	 * Getter for hasEmptyClause.
-	 * 
 	 * @return the hasEmptyClause
 	 */
 	public boolean checkIfHasEmptyClause() {
@@ -188,7 +179,7 @@ public class SAT {
 				File file = new File(fileName);
 				pw = new PrintWriter(file);
 			} catch (FileNotFoundException e) {
-				e.printStackTrace(); // TODO
+				e.printStackTrace(); //TODO
 			}
 		} else {
 			pw = new PrintWriter(System.out);
@@ -198,7 +189,7 @@ public class SAT {
 		pw.println("c kcoltosat");
 		pw.println("p cnf " + this.numOfVariables + " " + this.numOfClauses);
 
-		// convert array list to array.
+		//convert array list to array.
 		Clause[] clauseArr = clauses.stream().toArray(Clause[]::new);
 
 		// use for-each loop to check all clauses
@@ -210,7 +201,7 @@ public class SAT {
 			for (int i = 0; i < varArr.length; i++) {
 				Variable var = varArr[i];
 
-				if (var != null) { // to avoid the null pointer exception
+				if (var != null) { //to avoid the null pointer exception
 					int value = var.getVar();
 					sb.append(value);
 					sb.append(" ");
@@ -229,13 +220,12 @@ public class SAT {
 			pw.println(sb.toString());
 		}
 
-		pw.flush(); // flush the output
-		pw.close(); // close the print writer
+		pw.flush(); //flush the output
+		pw.close(); //close the print writer
 	}
 
 	/**
 	 * Setter for hasEmptyClause
-	 * 
 	 * @param hasEmptyClause the hasEmptyClause to set
 	 */
 	public void setHasEmptyClause(boolean hasEmptyClause) {
