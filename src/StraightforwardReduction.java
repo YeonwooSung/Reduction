@@ -262,9 +262,7 @@ public class StraightforwardReduction {
 		} //while loop ends
 
 		if (isCNF) {
-			if (numOfLineToRead != 1 && !shouldBeEmpty) {
-				System.exit(ONE);
-			}
+			//TODO
 		} else {
 			if (numOfLineToRead != 0 && !shouldBeEmpty) {
 				System.exit(ONE);
