@@ -6,6 +6,7 @@ import java.util.List;
 
 public class SAT {
 
+	private final int ZERO = 0;
 	private int numOfClauses;
 	private int numOfVariables;
 	private boolean hasEmptyClause; //to check if sat has an empty clause
@@ -198,6 +199,12 @@ public class SAT {
 					int value = var.getVar();
 					sb.append(value);
 					sb.append(" ");
+
+					if (i == varArr.length - 1 && value != ZERO)
+						sb.append("0");
+					else if (value == ZERO) {
+						this.setNumOfClauses(this.getNumOfClauses() + 1);
+					}
 				} else {
 					if (i != 0)
 						sb.append("0");
