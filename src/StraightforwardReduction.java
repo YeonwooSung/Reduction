@@ -33,12 +33,15 @@ public class StraightforwardReduction {
 			br.close();
 
 		} catch (FileNotFoundException e) {
+			e.printStackTrace(); //TODO
 			// error handling -> file not found
 			System.exit(ONE);
 		} catch (IOException | NumberFormatException e) {
+			e.printStackTrace();
 			// error handling -> invalid input
 			System.exit(ONE);
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.exit(ONE);
 		}
 	}
@@ -102,7 +105,7 @@ public class StraightforwardReduction {
 						isCNF = true;
 						int variables = Integer.parseInt(words[TWO]);
 						int clauses = Integer.parseInt(words[THREE]);
-						numOfLineToRead = clauses - ONE;
+						numOfLineToRead = clauses;
 
 						//check if this is an empty clause
 						if (clauses == 0)
@@ -258,9 +261,14 @@ public class StraightforwardReduction {
 
 		} //while loop ends
 
-		if (numOfLineToRead != 0 && !shouldBeEmpty) {
-			System.out.println(numOfLineToRead); //TODO need to remove this later
-			System.exit(ONE);
+		if (isCNF) {
+			if (numOfLineToRead != 1 && !shouldBeEmpty) {
+				System.exit(ONE);
+			}
+		} else {
+			if (numOfLineToRead != 0 && !shouldBeEmpty) {
+				System.exit(ONE);
+			}
 		}
 
 		if (!isCNF) {
