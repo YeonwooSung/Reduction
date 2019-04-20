@@ -113,7 +113,6 @@ public class SAT {
 				} else {
 					//check if the number of clauses of the SAT object is 1.
 					if (this.getNumOfClauses() == 1) {
-						//TODO ????
 						totalNumOfClauses = 1;
 					} else {
 						totalNumOfClauses += 1;

@@ -32,14 +32,24 @@ public class ThreeSAT_To_KCol {
 			br.close();
 
 		} catch (FileNotFoundException e) {
+			e.printStackTrace(); //TODO
 			System.exit(ONE);
 		} catch (IOException | NumberFormatException e) {
+			e.printStackTrace(); //TODO
 			System.exit(ONE);
 		} catch (Exception e) {
+			e.printStackTrace(); //TODO
 			System.exit(ONE);
 		}
 	}
 
+	/**
+	 * This method reads and parses the input file.
+	 *
+	 * @throws IOException could be occurred while reading the input.
+	 * @throws NumberFormatException could be occurred when it tries to convert string to integer.
+	 * @throws Exception could be occurred when some unexpected error occurs
+	 */
 	private void parseInput() throws IOException, NumberFormatException, Exception {
 		satTHREE = new ThreeSAT();
 
@@ -83,6 +93,7 @@ public class ThreeSAT_To_KCol {
 		// read lines until it gets the end of the file
 		while ((line = br.readLine()) != null) {
 			sb.append(line);
+			sb.append("\n");
 		}
 
 		String str = sb.toString(); //convert the string builder to the string
@@ -145,10 +156,20 @@ public class ThreeSAT_To_KCol {
 	 * TODO comments
 	 */
 	public static void main(String[] args) {
-		ThreeSAT_To_KCol converter = new ThreeSAT_To_KCol("syntax_yes.cnf");
-		ThreeSAT satTHREE = converter.getSatTHREE();
-		satTHREE.printClauses();
-		System.out.println("test");
+		String inputFile = null;
+		String outputFile = null;
+
+		if (args.length > 0) {
+			inputFile = args[0];
+			if (args.length > 1) {
+				outputFile = args[1];
+			}
+		}
+
+		ThreeSAT_To_KCol converter = new ThreeSAT_To_KCol(inputFile);
+		ThreeSAT sat3 = converter.getSatTHREE();
+		
+		KCol kcol = sat3.convertToKCol();
 
 		System.exit(0);
 	}

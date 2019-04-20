@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +8,11 @@ import java.util.List;
 
 public class ThreeSAT {
 	private final int ZERO = 0;
+	private final int ONE = 1;
+	private final int TWO = 2;
+	private final int THREE = 3;
+	private final String ZERO_STR = "0";
+
 	private int numOfClauses;
 	private int numOfVariables;
 	private boolean hasEmptyClause; //to check if sat has an empty clause
@@ -17,6 +23,11 @@ public class ThreeSAT {
 		clauses = new ArrayList<Clause>();
 	}
 
+	/**
+	 * Append the clause to the list of clauses.
+	 *
+	 * @param clause
+	 */
 	public void appendClause(Clause clause) {
 		clauses.add(clause);
 	}
@@ -102,7 +113,7 @@ public class ThreeSAT {
 				File file = new File(fileName);
 				pw = new PrintWriter(file);
 			} catch (FileNotFoundException e) {
-				e.printStackTrace(); //TODO
+				e.printStackTrace();
 			}
 		} else {
 			pw = new PrintWriter(System.out);
@@ -129,14 +140,14 @@ public class ThreeSAT {
 					sb.append(value);
 					sb.append(" ");
 
-					if (i == varArr.length - 1 && value != ZERO)
-						sb.append("0");
+					if (i == varArr.length - ONE && value != ZERO)
+						sb.append(ZERO_STR);
 					else if (value == ZERO) {
-						this.setNumOfClauses(this.getNumOfClauses() + 1);
+						this.setNumOfClauses(this.getNumOfClauses() + ONE);
 					}
 				} else {
-					if (i != 0)
-						sb.append("0");
+					if (i != ZERO)
+						sb.append(ZERO_STR);
 				}
 			}
 
@@ -145,6 +156,73 @@ public class ThreeSAT {
 
 		pw.flush(); //flush the output
 		pw.close(); //close the print writer
+	}
+
+	/**
+	 * This method converts the sat to kcol.
+	 *
+	 * @return
+	 */
+	public KCol convertToKCol() {
+		KCol kcol = new KCol();
+
+		/*
+		 * Assume we have n variables.
+		 * 1 to n for positive values of variables.
+		 * n+1 to 2n for negative values of variables.
+		 * 2n+1 to 3n for clique nodes.
+		 * 3n+1 to 3n+k (where k is the number of clauses) for clause nodes.
+		 */
+		int numOfNodes = this.numOfVariables * THREE + this.numOfClauses;
+
+		int numOfCol = this.numOfVariables + ONE;
+
+		kcol.setNumOfNodes(numOfNodes);
+
+		try {
+			kcol.setNumOfCol(numOfCol); //set the number of colours
+
+			//TODO what if numOfVariables < 4 ??
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		int limit = this.numOfVariables * 3;
+
+		// use for loop to check all variables
+		for (int i = ONE; i <= this.numOfVariables; i++) {
+
+			// edge that connects v and not v
+			Edge newEdge = new Edge();
+			newEdge.setEndPoints(i, i + numOfVariables);
+			kcol.appendEdge(newEdge);
+
+			int targetClique = this.numOfVariables * TWO + i;
+
+			// use for loop to connect vertex v and clique vertices.
+			for (int j = numOfVariables * TWO + ONE; j <= limit; j++) {
+				if (j != targetClique) {
+					Edge cliqueEdge = new Edge();
+					cliqueEdge.setEndPoints(i, j);
+					kcol.appendEdge(cliqueEdge);
+				}
+			}
+		}
+
+		// connect vertices to make a clique
+		for (int j = numOfVariables * TWO + ONE; j <= limit; j++) {
+			for (int k = j + 1; k <= limit; k++) {
+				Edge cliqueEdge = new Edge();
+				cliqueEdge.setEndPoints(j, k);
+				kcol.appendEdge(cliqueEdge);
+			}
+		}
+
+		//TODO connect clause and literals that are not included in the clause
+
+		kcol.validateNodes(); //validate the nodes of the kcol object
+
+		return kcol;
 	}
 
 }
