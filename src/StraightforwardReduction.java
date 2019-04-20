@@ -58,6 +58,7 @@ public class StraightforwardReduction {
 		int numOfLineToRead = 0;
 		boolean isCNF = false;
 		boolean shouldBeEmpty = false;
+		boolean isEmpty = true;
 
 		String line;
 
@@ -136,6 +137,7 @@ public class StraightforwardReduction {
 
 				// check if the input file is a cnf type
 				if (isCNF) {
+					isEmpty = false;
 
 					//parse the line to build clause instances.
 					StringBuilder sb = new StringBuilder();
@@ -262,7 +264,13 @@ public class StraightforwardReduction {
 		} //while loop ends
 
 		if (isCNF) {
-			//TODO
+			if (isEmpty && numOfLineToRead > 0) {
+				System.exit(ONE);
+			}
+
+			if (numOfLineToRead != 1 && !shouldBeEmpty) {
+				System.exit(ONE);
+			}
 		} else {
 			if (numOfLineToRead != 0 && !shouldBeEmpty) {
 				System.exit(ONE);
