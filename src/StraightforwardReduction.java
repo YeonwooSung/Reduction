@@ -39,7 +39,7 @@ public class StraightforwardReduction {
 			// error handling -> invalid input
 			System.exit(ONE);
 		} catch (Exception e) {
-			System.exit(TWO);
+			System.exit(ONE);
 		}
 	}
 
@@ -260,7 +260,7 @@ public class StraightforwardReduction {
 
 		if (numOfLineToRead != 0 && !shouldBeEmpty) {
 			System.out.println(numOfLineToRead); //TODO need to remove this later
-			System.exit(THREE);
+			System.exit(ONE);
 		}
 
 		if (!isCNF) {
