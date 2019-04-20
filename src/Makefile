@@ -2,7 +2,7 @@ JAVAC=javac
 sources = $(wildcard *.java)
 classes = $(sources:.java=.class)
 
-all: myProgram jar copy_file
+all: javac_compile jar copy_file
 
 javac_compile:
 	javac *.java
