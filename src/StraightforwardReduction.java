@@ -52,7 +52,7 @@ public class StraightforwardReduction {
 		sat = new SAT();
 
 		boolean preamble = true;
-		int numOfLineToRead = 0;
+		int numOfLineToRead = ZERO;
 		boolean isCNF = false;
 		boolean shouldBeEmpty = false;
 		boolean isEmpty = true;
@@ -106,7 +106,7 @@ public class StraightforwardReduction {
 						numOfLineToRead = clauses;
 
 						//check if this is an empty clause
-						if (clauses == 0)
+						if (clauses == ZERO)
 							shouldBeEmpty = true;
 
 						sat.setNumOfClauses(clauses);
@@ -122,7 +122,7 @@ public class StraightforwardReduction {
 					String[] splitted = line.split("\\s+");
 
 					// use for loop to check all words in the line
-					for (int i = 0; i < splitted.length; i++) {
+					for (int i = ZERO; i < splitted.length; i++) {
 						if (!splitted[i].isEmpty()) { //check whether this line is empty or not
 							throw new IOException(); //invalid file format
 						}
@@ -151,10 +151,11 @@ public class StraightforwardReduction {
 					boolean hasEmptyClause = false; //to check if the SAT has an empty clause.
 
 					// use for loop to iterate all literals
-					for (int i = 0; i < literals.length; i++) {
+					for (int i = ZERO; i < literals.length; i++) {
 						String literal = literals[i];
 
-						if (literal.equals("0")) {
+						// check if the literal is ZERO, which is a terminator of a clause
+						if (literal.equals("ZERO")) {
 							if (hasEmptyClause) {
 								sat.setHasEmptyClause(true);
 							} else {
@@ -162,19 +163,20 @@ public class StraightforwardReduction {
 							}
 
 							//check if the clause is empty
-							if (clause.countVariables() != 0) {
+							if (clause.countVariables() != ZERO) {
 								clause.appendVariable(null);
 								sat.appendClause(clause);
 								clause = new Clause();
 							} else {
 								// add zero for an empty clause
-								clause.appendVariable(new Variable(0));
+								clause.appendVariable(new Variable(ZERO));
 								sat.appendClause(clause);
 								clause = new Clause();
 							}
 
 							if (i != literals.length - ONE)
 								numOfLineToRead -= ONE;
+
 						} else {
 							hasEmptyClause = false;
 							int l = Integer.parseInt(literal);
@@ -183,7 +185,7 @@ public class StraightforwardReduction {
 							if (Math.abs(l) > sat.getNumOfVariables())
 								throw new IOException();
 
-							// check if there is any clause in the file should have 0 clauses.
+							// check if there is any clause in the file should have ZERO clauses.
 							if (shouldBeEmpty)
 								throw new IOException();
 
@@ -211,7 +213,7 @@ public class StraightforwardReduction {
 						throw new IOException();
 
 					//check if this line is an edge descriptor
-					if (words[0].equals("e")) {
+					if (words[ZERO].equals("e")) {
 						// edge descriptor -> "e W V"  (W and V specify the end points of the edge)
 
 						numOfLineToRead -= ONE;
@@ -243,7 +245,7 @@ public class StraightforwardReduction {
 
 						kcol.appendEdge(edge);
 
-					} else if (words[0].equals("n")) { //check if this line is a node descriptor
+					} else if (words[ZERO].equals("n")) { //check if this line is a node descriptor
 						//node descriptor -> "n ID VALUE"
 
 						Node node = new Node();
@@ -267,7 +269,7 @@ public class StraightforwardReduction {
 		} //while loop ends
 
 		if (isCNF) {
-			if (isEmpty && numOfLineToRead > 0) {
+			if (isEmpty && numOfLineToRead > ZERO) {
 				System.exit(ONE);
 			}
 
@@ -275,7 +277,7 @@ public class StraightforwardReduction {
 				System.exit(ONE);
 			}
 		} else {
-			if (numOfLineToRead != 0 && !shouldBeEmpty) {
+			if (numOfLineToRead != ZERO && !shouldBeEmpty) {
 				System.exit(ONE);
 			}
 		}

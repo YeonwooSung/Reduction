@@ -7,6 +7,8 @@ import java.util.List;
 public class SAT {
 
 	private final int ZERO = 0;
+	private final int ONE = 1;
+
 	private int numOfClauses;
 	private int numOfVariables;
 	private boolean hasEmptyClause; //to check if sat has an empty clause
@@ -107,11 +109,14 @@ public class SAT {
 
 				if (!this.hasEmptyClause) {
 					// check if this clause if an empty clause
-					if (clause.countVariables() > 0)
-						if (clause.countVariables() > 1 || clause.getVariable(0) != null)
+					if (clause.countVariables() > ZERO) {
+						if (clause.countVariables() > ONE || clause.getVariable(0) != null)
 							totalNumOfClauses += 1;
+					} else if (clause.countVariables() == ONE && clause.getVariable(ZERO).getVar() == ZERO) {
+						totalNumOfClauses += 1; //for the empty clause
+					}
 				} else {
-					totalNumOfClauses += 1;
+					totalNumOfClauses += ONE;
 				}
 
 			} else {
