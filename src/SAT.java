@@ -151,7 +151,6 @@ public class SAT {
 			}
 		}
 
-		System.out.println(totalNumOfClauses);
 		sat3.setNumOfClauses(totalNumOfClauses);
 
 		return sat3;
