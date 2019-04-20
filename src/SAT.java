@@ -175,15 +175,19 @@ public class SAT {
 			Variable[] varArr = c.getListOfVariables();
 			StringBuilder sb = new StringBuilder();
 
-			// use for-each loop to check all variables in the clause
-			for (Variable var : varArr) {
-				if (var != null) { //to avoid the null pointer exception
+			// use for loop to check all variables in the clause
+			for (int i = 0; i < varArr.length; i++) {
+				Variable var = varArr[i];
+
+				if (var != null) { // to avoid the null pointer exception
 					int value = var.getVar();
 					sb.append(value);
 					sb.append(" ");
+				} else {
+					if (i != 0)
+						sb.append("0");
 				}
 			}
-			sb.append("0");
 
 			pw.println(sb.toString());
 		}
