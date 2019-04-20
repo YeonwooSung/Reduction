@@ -10,7 +10,6 @@ import java.util.List;
 
 public class StraightforwardReduction {
 	private BufferedReader br;
-	private List<String> comments; //list to store comments
 	private KCol kcol;
 	private SAT sat;
 
@@ -22,23 +21,18 @@ public class StraightforwardReduction {
 				br = new BufferedReader(new FileReader(new File(name)));
 			}
 
-			comments = new ArrayList<String>();
-
 			//read the input file
 			this.readAndParse();
 
 			br.close();
 
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 			// error handling -> file not found
 			System.exit(1);
 		} catch (IOException | NumberFormatException e) {
-			e.printStackTrace();
 			// error handling -> invalid input
 			System.exit(1);
 		} catch (Exception e) {
-			e.printStackTrace();
 			System.exit(2);
 		}
 	}
@@ -52,23 +46,22 @@ public class StraightforwardReduction {
 		sat = new SAT();
 
 		boolean preamble = true;
-		int numOfReadLine = 0;
+		int numOfLineToRead = 0;
 		boolean isCNF = false;
 		boolean shouldBeEmpty = false;
 
 		String line;
 
 		while ((line = br.readLine()) != null) {
-			//String line = br.readLine();
+			if (line.isEmpty()) 
+				continue;
 
 			// check whether the read line is supposed to be a preamble or not
 			if (preamble) {
 
 				// Check the first character of the line
 				if (line.startsWith("c")) {
-
-					comments.add(line); //add comment line to the list of comments
-
+					continue; //if the first character is c, continue the loop as we don't need to care about comment line
 				} else if (line.startsWith("p")) {
 					String[] words = line.split("\\s+"); //split the line by whitespace characters
 
@@ -81,7 +74,7 @@ public class StraightforwardReduction {
 						int nodes = Integer.parseInt(words[2]);
 						int edges = Integer.parseInt(words[3]);
 
-						numOfReadLine = edges;
+						numOfLineToRead = edges;
 						kcol.setNumOfEdges(edges);
 						kcol.setNumOfNodes(nodes);
 
@@ -103,7 +96,7 @@ public class StraightforwardReduction {
 						isCNF = true;
 						int variables = Integer.parseInt(words[2]);
 						int clauses = Integer.parseInt(words[3]);
-						numOfReadLine = clauses - 1;
+						numOfLineToRead = clauses - 1;
 
 						//check if this is an empty clause
 						if (clauses == 0)
@@ -134,9 +127,6 @@ public class StraightforwardReduction {
 
 				// check if the input file is a cnf type
 				if (isCNF) {
-					if (line.equals("")) {
-						continue;
-					}
 
 					//parse the line to build clause instances.
 					StringBuilder sb = new StringBuilder();
@@ -165,7 +155,7 @@ public class StraightforwardReduction {
 							}
 
 							if (i != literals.length - 1)
-								numOfReadLine -= 1;
+								numOfLineToRead -= 1;
 						} else {
 							int l = Integer.parseInt(literal);
 
@@ -185,8 +175,13 @@ public class StraightforwardReduction {
 
 				} else { //input file is an edge type.
 
+					//check if the read line is a comment line
+					if (line.startsWith("c ")) 
+						continue;
+
 					String[] words = line.split("\\s+");
 
+					// if the read line is a valid input, then it should have 3 tokens: 'e for edge and 2 end points of the edge'
 					if (words.length != 3) 
 						throw new IOException();
 
@@ -194,7 +189,7 @@ public class StraightforwardReduction {
 					if (words[0].equals("e")) {
 						// edge descriptor -> "e W V"  (W and V specify the end points of the edge)
 
-						numOfReadLine -= 1;
+						numOfLineToRead -= 1;
 
 						int startpoint = Integer.parseInt(words[1]);
 						int endpoint = Integer.parseInt(words[2]);
@@ -209,7 +204,7 @@ public class StraightforwardReduction {
 							tuple = endpoint + "," + startpoint;
 						}
 
-						if (!kcol.hasEndpoints(tuple)) 
+						if (!kcol.hasEndpoints(tuple)) //check if the kcol instance already has this edge
 							throw new IOException();
 
 						kcol.addEndpointTuple(tuple);
@@ -225,7 +220,7 @@ public class StraightforwardReduction {
 						Node node = new Node();
 						int id = Integer.parseInt(words[1]);
 
-						if (!kcol.hasID(id)) {
+						if (!kcol.hasID(id)) { //check if this node is duplicated
 							throw new IOException();
 						}
 
@@ -242,8 +237,8 @@ public class StraightforwardReduction {
 
 		} //while loop ends
 
-		if (numOfReadLine != 0 && !shouldBeEmpty) {
-			System.out.println(numOfReadLine); //TODO need to remove this later
+		if (numOfLineToRead != 0 && !shouldBeEmpty) {
+			System.out.println(numOfLineToRead); //TODO need to remove this later
 			System.exit(3);
 		} else if (shouldBeEmpty) {
 			//TODO solution1.cnf -> ok because there are no clauses at all
@@ -273,36 +268,6 @@ public class StraightforwardReduction {
 	 */
 	public KCol getKCol() {
 		return kcol;
-	}
-
-
-	/*
-	 * TODO comment!
-	 */
-	public static void main(String[] args) {
-//		StraightforwardReduction reduction1 = new StraightforwardReduction("test_ok.cnf");
-//
-//		System.out.println("yes");
-//
-//		SAT sat = reduction1.getSAT();
-//		sat.printClauses();
-//
-//		System.out.println("yes");
-//
-//		ThreeSAT sat3 = reduction1.convertSAT_to_3SAT();
-//		System.out.println("haha");
-//
-		StraightforwardReduction reduction2 = new StraightforwardReduction("test.col");
-		System.out.println("col test start");
-
-		KCol kcol = reduction2.getKCol();
-		kcol.printNodes();
-		kcol.printEdges();
-		SAT newsat = kcol.convert_kcol_to_sat();
-		newsat.printClauses();
-
-		//If the program success, it should exit with exit code 0.
-		System.exit(0);
 	}
 
 }

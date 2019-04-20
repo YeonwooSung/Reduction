@@ -103,7 +103,7 @@ public class SAT {
 				Clause newClause = new Clause();
 				newClause.appendVariable(clause.getVariable(0));
 				newClause.appendVariable(clause.getVariable(1));
-				newClause.appendVariable(new Variable(this.countNumOfClauses() + offset));
+				newClause.appendVariable(new Variable(this.getNumOfVariables() + offset));
 				newClause.appendVariable(null);
 
 				sat3.appendClause(newClause);
@@ -113,14 +113,18 @@ public class SAT {
 				for (int j = 2; j < numOfVariables; j++) {
 					newClause = new Clause();
 
-					int newVal = -1 * (this.countNumOfClauses() + offset++);
+					int sum = this.getNumOfVariables() + offset++;
+					int newVal = - sum;
 					newClause.appendVariable(new Variable(newVal));
+
+					sat3.setNumOfVariables(sum);
 
 					newClause.appendVariable(clause.getVariable(j));
 
 					if (j < limit) {
-						System.out.println(this.countNumOfClauses() + offset);
-						newClause.appendVariable(new Variable(this.countNumOfClauses() + offset));
+						sum = this.getNumOfVariables() + offset;
+						newClause.appendVariable(new Variable(sum));
+						sat3.setNumOfVariables(sum);
 					}
 
 					newClause.appendVariable(null);
