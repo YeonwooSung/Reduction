@@ -13,6 +13,12 @@ public class StraightforwardReduction {
 	private KCol kcol;
 	private SAT sat;
 
+	private final int ZERO = 0;
+	private final int ONE = 1;
+	private final int TWO = 2;
+	private final int THREE = 3;
+	private final int FOUR = 4;
+
 	StraightforwardReduction(String name) {
 		try {
 			if (name == null) {
@@ -28,12 +34,12 @@ public class StraightforwardReduction {
 
 		} catch (FileNotFoundException e) {
 			// error handling -> file not found
-			System.exit(1);
+			System.exit(ONE);
 		} catch (IOException | NumberFormatException e) {
 			// error handling -> invalid input
-			System.exit(1);
+			System.exit(ONE);
 		} catch (Exception e) {
-			System.exit(2);
+			System.exit(TWO);
 		}
 	}
 
@@ -65,14 +71,14 @@ public class StraightforwardReduction {
 				} else if (line.startsWith("p")) {
 					String[] words = line.split("\\s+"); //split the line by whitespace characters
 
-					if (words.length != 4) 
+					if (words.length != FOUR) 
 						throw new IOException();
-					if (words[1].contains("edge")) {
+					if (words[ONE].contains("edge")) {
 						/* words[1] = FORMAT, words[2] = NODES, words[3] = EDGES */
 
 						//NumberFormatException might be occurred if the word is not an integer
-						int nodes = Integer.parseInt(words[2]);
-						int edges = Integer.parseInt(words[3]);
+						int nodes = Integer.parseInt(words[TWO]);
+						int edges = Integer.parseInt(words[THREE]);
 
 						numOfLineToRead = edges;
 						kcol.setNumOfEdges(edges);
@@ -83,20 +89,20 @@ public class StraightforwardReduction {
 
 						if (colourLine.startsWith("colours")) {
 							String[] colourArray = colourLine.split("\\s+");
-							int numOfColour = Integer.parseInt(colourArray[1]);
+							int numOfColour = Integer.parseInt(colourArray[ONE]);
 
 							kcol.setNumOfCol(numOfColour);
 						} else {
 							throw new IOException();
 						}
 
-					} else if (words[1].equals("cnf")) {
+					} else if (words[ONE].equals("cnf")) {
 						/* words[1] = FORMAT, words[2] = VARIABLES, words[3] = CLAUSES */
 
 						isCNF = true;
-						int variables = Integer.parseInt(words[2]);
-						int clauses = Integer.parseInt(words[3]);
-						numOfLineToRead = clauses - 1;
+						int variables = Integer.parseInt(words[TWO]);
+						int clauses = Integer.parseInt(words[THREE]);
+						numOfLineToRead = clauses - ONE;
 
 						//check if this is an empty clause
 						if (clauses == 0)
@@ -140,12 +146,18 @@ public class StraightforwardReduction {
 
 					String[] literals = sb.toString().split("\\s+"); //split by whitespace characters
 					Clause clause = new Clause();
+					boolean hasEmptyClause = false; //to check if the SAT has an empty clause.
 
 					// use for loop to iterate all literals
 					for (int i = 0; i < literals.length; i++) {
 						String literal = literals[i];
 
 						if (literal.equals("0")) {
+							if (hasEmptyClause) {
+								sat.setHasEmptyClause(true);
+							} else {
+								hasEmptyClause = true;
+							}
 
 							//check if the clause is empty
 							if (clause.countVariables() != 0) {
@@ -154,9 +166,10 @@ public class StraightforwardReduction {
 								clause = new Clause();
 							}
 
-							if (i != literals.length - 1)
-								numOfLineToRead -= 1;
+							if (i != literals.length - ONE)
+								numOfLineToRead -= ONE;
 						} else {
+							hasEmptyClause = false;
 							int l = Integer.parseInt(literal);
 
 							// check if the literal is in the valid range
@@ -171,6 +184,10 @@ public class StraightforwardReduction {
 						}
 					}
 
+					if (hasEmptyClause && sat.getNumOfClauses() == ONE) {
+						sat.setHasEmptyClause(true);
+					}
+
 					sat.appendClause(clause);
 
 				} else { //input file is an edge type.
@@ -181,18 +198,22 @@ public class StraightforwardReduction {
 
 					String[] words = line.split("\\s+");
 
-					// if the read line is a valid input, then it should have 3 tokens: 'e for edge and 2 end points of the edge'
-					if (words.length != 3) 
+					// if the read line is a valid input, then it should have THREE tokens: 'e for edge and TWO end points of the edge'
+					if (words.length != THREE) 
 						throw new IOException();
 
 					//check if this line is an edge descriptor
 					if (words[0].equals("e")) {
 						// edge descriptor -> "e W V"  (W and V specify the end points of the edge)
 
-						numOfLineToRead -= 1;
+						numOfLineToRead -= ONE;
 
-						int startpoint = Integer.parseInt(words[1]);
-						int endpoint = Integer.parseInt(words[2]);
+						int startpoint = Integer.parseInt(words[ONE]);
+						int endpoint = Integer.parseInt(words[TWO]);
+
+						// we cannot have negative numbers in edge
+						if (startpoint < ONE || endpoint < ONE)
+							throw new IOException();
 
 						String tuple;
 
@@ -218,14 +239,14 @@ public class StraightforwardReduction {
 						//node descriptor -> "n ID VALUE"
 
 						Node node = new Node();
-						int id = Integer.parseInt(words[1]);
+						int id = Integer.parseInt(words[ONE]);
 
 						if (!kcol.hasID(id)) { //check if this node is duplicated
 							throw new IOException();
 						}
 
 						node.setId(id);
-						node.setValue(Integer.parseInt(words[2]));
+						node.setValue(Integer.parseInt(words[TWO]));
 
 						kcol.appendNode(node);
 
@@ -239,9 +260,7 @@ public class StraightforwardReduction {
 
 		if (numOfLineToRead != 0 && !shouldBeEmpty) {
 			System.out.println(numOfLineToRead); //TODO need to remove this later
-			System.exit(3);
-		} else if (shouldBeEmpty) {
-			//TODO solution1.cnf -> ok because there are no clauses at all
+			System.exit(THREE);
 		}
 
 		if (!isCNF) {

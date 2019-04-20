@@ -41,6 +41,17 @@ public class Clause {
 		variables.add(v);
 	}
 
+	/**
+	 * Returns the list of variables
+	 * @return variable array
+	 */
+	public Variable[] getListOfVariables() {
+		return variables.stream().toArray(Variable[]::new);
+	}
+
+	/**
+	 * Print out the variables.
+	 */
 	public void printVariables() {
 		Variable[] vars = variables.stream().toArray(Variable[]::new);
 

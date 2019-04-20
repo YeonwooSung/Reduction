@@ -6,14 +6,21 @@ public class KCol_To_SAT {
 	 */
 	public static void main(String[] args) {
 		//TODO file name, command line arguments
-		StraightforwardReduction reduction2 = new StraightforwardReduction("test.col");
-		System.out.println("col test start");
+		String inputFile = null;
+		String outputFile = null;
+
+		if (args.length > 0) {
+			inputFile = args[0];
+			if (args.length > 1) {
+				outputFile = args[1];
+			}
+		}
+
+		StraightforwardReduction reduction2 = new StraightforwardReduction(inputFile);
 
 		KCol kcol = reduction2.getKCol();
-		kcol.printNodes();
-		kcol.printEdges();
 		SAT newsat = kcol.convert_kcol_to_sat();
-		newsat.printClauses();
+		newsat.printCNF(outputFile);
 
 		//If the program success, it should exit with exit code 0.
 		System.exit(0);

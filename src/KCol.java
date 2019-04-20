@@ -1,4 +1,7 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -86,10 +89,13 @@ public class KCol {
 				clause.appendVariable(new Variable(start));
 				clause.appendVariable(new Variable(end));
 
+				sat.appendClause(clause); //append the clause to the list
+				clause = new Clause();
+
+				// change the value so that each node could have different values for different colours.
 				start -= numOfNodes;
 				end -= numOfNodes;
 			}
-			sat.appendClause(clause);
 		}
 		sat.setNumOfClauses(sat.countNumOfClauses()); //set number of clauses
 
@@ -293,6 +299,47 @@ public class KCol {
 				nodes.add(new Node(index, 1));
 			}
 		}
+	}
+
+	public void printKCol(String fileName) {
+		PrintWriter pw = null;
+
+		if (fileName != null) {
+			try {
+				File file = new File(fileName);
+				pw = new PrintWriter(file);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace(); //TODO
+			}
+		} else {
+			pw = new PrintWriter(System.out);
+		}
+
+		// print out the preamble section
+		pw.println("c kcoltosat");
+		pw.println("p edge " + this.numOfNodes + " " + this.numOfEdges);
+		pw.println("colours " + this.numOfCol);
+
+		//convert array list to array.
+		Edge[] edgeArr = edges.stream().toArray(Edge[]::new);
+
+		// use for-each loop to check all clauses
+		for (Edge e : edgeArr) {
+			StringBuilder sb = new StringBuilder();
+
+			int startPoint = e.getStartPoint();
+			int endPoint = e.getEndPoint();
+
+			sb.append("e ");
+			sb.append(startPoint);
+			sb.append(" ");
+			sb.append(endPoint);
+
+			pw.println(sb.toString());
+		}
+
+		pw.flush(); //flush the output
+		pw.close(); //close the print writer
 	}
 
 	/**

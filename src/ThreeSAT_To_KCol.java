@@ -9,9 +9,14 @@ import java.util.List;
 
 
 public class ThreeSAT_To_KCol {
-	private ThreeSAT sat3;
+	private ThreeSAT satTHREE;
 	private BufferedReader br;
-	private List comments;
+
+	private final int ZERO = 0;
+	private final int ONE = 1;
+	private final int TWO = 2;
+	private final int THREE = 3;
+	private final int FOUR = 4;
 
 	ThreeSAT_To_KCol(String fileName) {
 		try {
@@ -21,8 +26,6 @@ public class ThreeSAT_To_KCol {
 				br = new BufferedReader(new InputStreamReader(System.in));
 			}
 
-			comments = new ArrayList<String>();
-
 			// read the input file
 			this.parseInput();
 
@@ -30,18 +33,18 @@ public class ThreeSAT_To_KCol {
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace(); //TODO
-			System.exit(1);
+			System.exit(ONE);
 		} catch (IOException | NumberFormatException e) {
 			e.printStackTrace(); //TODO
-			System.exit(1);
+			System.exit(ONE);
 		} catch (Exception e) {
 			e.printStackTrace(); //TODO
-			System.exit(1);
+			System.exit(ONE);
 		}
 	}
 
 	private void parseInput() throws IOException, NumberFormatException, Exception {
-		sat3 = new ThreeSAT();
+		satTHREE = new ThreeSAT();
 
 		String line;
 
@@ -52,26 +55,26 @@ public class ThreeSAT_To_KCol {
 
 			String[] words = line.split("\\s+"); //split the line by whitespace characters
 
-			if (words[0].equals("c")) 
+			if (words[ZERO].equals("c")) 
 				continue; //it is okay to skip the comment line
-			else if (words[0].equals("p")) {
-				//TODO
-				if (words.length != 4) 
+			else if (words[ZERO].equals("p")) {
+				//check if the input format is valid
+				if (words.length != FOUR) 
 					throw new IOException();
 
-				if (words[1].equals("cnf")) {
+				if (words[ONE].equals("cnf")) {
 					/* words[1] = FORMAT, words[2] = VARIABLES, words[3] = CLAUSES */
 
-					int variables = Integer.parseInt(words[2]);
-					int clauses = Integer.parseInt(words[3]);
+					int variables = Integer.parseInt(words[TWO]);
+					int clauses = Integer.parseInt(words[THREE]);
 
-					sat3.setNumOfClauses(clauses);
-					sat3.setNumOfVariables(variables);
+					satTHREE.setNumOfClauses(clauses);
+					satTHREE.setNumOfVariables(variables);
 				} else {
-					throw new IOException();
+					throw new IOException(); //throw IOException if the input format is invalid
 				}
 
-				break;
+				break; //break the loop as the preamble is finished
 			} else {
 				throw new IOException(); //throw the IOException for invalid input
 			}
@@ -85,42 +88,60 @@ public class ThreeSAT_To_KCol {
 			sb.append(line);
 		}
 
-		String str = sb.toString();
+		String str = sb.toString(); //convert the string builder to the string
 
 		if (!str.isEmpty()) { //check whether the string is empty or not
 			String[] literals = str.split("\\s+");
 
 			Clause clause = new Clause();
-			int counter = 0; //to check if a clause has more than 3 literals
+			int counter = ZERO; //to check if a clause has more than THREE literals
+			boolean hasEmptyClause = false; //to check if the THREE-SAT has an empty clause.
 
-			for (int i = 0; i < literals.length; i++) {
+			for (int i = ZERO; i < literals.length; i++) {
 				//while convert a string to integer, NumberFormatException will be occurred if the current literal is not a number
 				int literal = Integer.parseInt(literals[i]);
 
-				if (literal != 0) {
-					counter += 1;
-					if (counter > 3)
-						throw new Exception(); //throw an exception if the clause of 3-SAT has more than 3 literals
+				// check if the literal is in a valid range
+				if (Math.abs(literal) > satTHREE.getNumOfVariables())
+					throw new IOException();
+
+				if (literal != ZERO) { //check if the current literal is ZERO
+					hasEmptyClause = false;
+
+					counter += ONE;
+
+					if (counter > THREE)
+						throw new Exception(); //throw an exception if the clause of THREE-SAT has more than THREE literals
 
 					Variable var = new Variable(literal);
 					clause.appendVariable(var);
 				} else {
-					counter = 0; //reset the counter value as the clause is terminated
-					sat3.appendClause(clause); //append the clause to the list of clauses
+					if (hasEmptyClause) {
+						satTHREE.setHasEmptyClause(true);
+					} else {
+						hasEmptyClause = true;
+					}
+
+					counter = ZERO; //reset the counter value as the clause is terminated
+					satTHREE.appendClause(clause); //append the clause to the list of clauses
 					clause = new Clause();
 				}
 			}
 
-			sat3.appendClause(clause); //append the clause to the list of clauses
+			if (hasEmptyClause && satTHREE.getNumOfClauses() == ONE) {
+				satTHREE.setHasEmptyClause(true);
+			}
+
+			satTHREE.appendClause(clause); //append the clause to the list of clauses
 		}
 	}
 
 	/**
-	 * Getter for sat3.
-	 * @return the sat3
+	 * Getter for satTHREE.
+	 * @return the satTHREE
 	 */
-	public ThreeSAT getSat3() {
-		return sat3;
+	public ThreeSAT getSatTHREE() {
+		return satTHREE;
 	}
 
 	/*
@@ -128,8 +149,8 @@ public class ThreeSAT_To_KCol {
 	 */
 	public static void main(String[] args) {
 		ThreeSAT_To_KCol converter = new ThreeSAT_To_KCol("syntax_yes.cnf");
-		ThreeSAT sat3 = converter.getSat3();
-		sat3.printClauses();
+		ThreeSAT satTHREE = converter.getSatTHREE();
+		satTHREE.printClauses();
 		System.out.println("test");
 
 		System.exit(0);
