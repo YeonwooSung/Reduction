@@ -155,7 +155,7 @@ public class StraightforwardReduction {
 						String literal = literals[i];
 
 						// check if the literal is ZERO, which is a terminator of a clause
-						if (literal.equals("ZERO")) {
+						if (literal.equals("0")) {
 							if (hasEmptyClause) {
 								sat.setHasEmptyClause(true);
 							} else {
@@ -164,10 +164,11 @@ public class StraightforwardReduction {
 
 							//check if the clause is empty
 							if (clause.countVariables() != ZERO) {
-								clause.appendVariable(null);
+								clause.appendVariable(null); //append null as a terminator
 								sat.appendClause(clause);
 								clause = new Clause();
 							} else {
+								sat.setHasEmptyClause(true);
 								// add zero for an empty clause
 								clause.appendVariable(new Variable(ZERO));
 								sat.appendClause(clause);
