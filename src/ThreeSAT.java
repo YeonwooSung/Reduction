@@ -6,6 +6,7 @@ import java.util.List;
 
 
 public class ThreeSAT {
+	private final int ZERO = 0;
 	private int numOfClauses;
 	private int numOfVariables;
 	private boolean hasEmptyClause; //to check if sat has an empty clause
@@ -29,6 +30,14 @@ public class ThreeSAT {
 		for (Clause c : clauseArr) {
 			c.printVariables();
 		}
+	}
+
+	/**
+	 * Count the number of clauses.
+	 * @return The number of clauses.
+	 */
+	public int countNumOfClauses() {
+		return clauses.size();
 	}
 
 	/**
@@ -119,8 +128,8 @@ public class ThreeSAT {
 					int value = var.getVar();
 					sb.append(value);
 					sb.append(" ");
-					
-					if (i == varArr.length - 1)
+
+					if (i == varArr.length - 1 && value != ZERO)
 						sb.append("0");
 				} else {
 					if (i != 0)

@@ -33,15 +33,12 @@ public class StraightforwardReduction {
 			br.close();
 
 		} catch (FileNotFoundException e) {
-			e.printStackTrace(); //TODO
 			// error handling -> file not found
 			System.exit(ONE);
 		} catch (IOException | NumberFormatException e) {
-			e.printStackTrace();
 			// error handling -> invalid input
 			System.exit(ONE);
 		} catch (Exception e) {
-			e.printStackTrace();
 			System.exit(ONE);
 		}
 	}
@@ -166,7 +163,12 @@ public class StraightforwardReduction {
 
 							//check if the clause is empty
 							if (clause.countVariables() != 0) {
-								clause.appendVariable(null); //TODO NULL
+								clause.appendVariable(null);
+								sat.appendClause(clause);
+								clause = new Clause();
+							} else {
+								// add zero for an empty clause
+								clause.appendVariable(new Variable(0));
 								sat.appendClause(clause);
 								clause = new Clause();
 							}
@@ -180,6 +182,7 @@ public class StraightforwardReduction {
 							// check if the literal is in the valid range
 							if (Math.abs(l) > sat.getNumOfVariables())
 								throw new IOException();
+
 							// check if there is any clause in the file should have 0 clauses.
 							if (shouldBeEmpty)
 								throw new IOException();
