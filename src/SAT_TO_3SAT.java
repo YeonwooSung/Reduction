@@ -10,10 +10,10 @@ public class SAT_TO_3SAT {
 		String outputFile = null;
 
 		if (args.length > 0) {
-			inputFile = args[1];
+			inputFile = args[0];
 
 			if (args.length > 1) {
-				outputFile = args[2];
+				outputFile = args[1];
 			}
 		}
 
