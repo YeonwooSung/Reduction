@@ -168,7 +168,6 @@ public class StraightforwardReduction {
 								sat.appendClause(clause);
 								clause = new Clause();
 							} else {
-								sat.setHasEmptyClause(true);
 								// add zero for an empty clause
 								clause.appendVariable(new Variable(ZERO));
 								sat.appendClause(clause);
