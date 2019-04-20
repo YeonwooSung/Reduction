@@ -20,6 +20,6 @@ copy_file:
 
 clean:
 	rm -rf *.class
-	rm manifest.txt
-	rm runTM.jar
-	rm runtm
+	rm sattothreesat
+	rm coltosat
+	rm threesattocol

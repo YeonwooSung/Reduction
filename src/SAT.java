@@ -93,6 +93,8 @@ public class SAT {
 		ThreeSAT sat3 = new ThreeSAT();
 
 		int numOfClauses = this.countNumOfClauses();
+		int totalNumOfClauses = 0;
+		int offset = 1;
 
 		for (int i = 0; i < numOfClauses; i++) {
 			Clause clause = this.getClause(i);
@@ -101,9 +103,17 @@ public class SAT {
 
 			if (numOfVariables <= 3) {
 				sat3.appendClause(clause);
-			} else {
 
-				int offset = 1;
+				if (!this.hasEmptyClause) {
+					// check if this clause if an empty clause
+					if (clause.countVariables() > 0)
+						if (clause.countVariables() > 1 || clause.getVariable(0) != null)
+							totalNumOfClauses += 1;
+				} else {
+					totalNumOfClauses += 1;
+				}
+
+			} else {
 
 				Clause newClause = new Clause();
 				newClause.appendVariable(clause.getVariable(0));
@@ -112,6 +122,7 @@ public class SAT {
 				newClause.appendVariable(null);
 
 				sat3.appendClause(newClause);
+				totalNumOfClauses += 1;
 
 				int limit = numOfVariables - 1;
 
@@ -133,10 +144,15 @@ public class SAT {
 					}
 
 					newClause.appendVariable(null);
+
+					totalNumOfClauses += 1;
 					sat3.appendClause(newClause);
 				}
 			}
 		}
+
+		System.out.println(totalNumOfClauses);
+		sat3.setNumOfClauses(totalNumOfClauses);
 
 		return sat3;
 	}
@@ -179,7 +195,7 @@ public class SAT {
 			for (int i = 0; i < varArr.length; i++) {
 				Variable var = varArr[i];
 
-				if (var != null) { // to avoid the null pointer exception
+				if (var != null) { //to avoid the null pointer exception
 					int value = var.getVar();
 					sb.append(value);
 					sb.append(" ");
