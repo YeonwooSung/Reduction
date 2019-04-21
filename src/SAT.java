@@ -7,6 +7,8 @@ import java.util.List;
 public class SAT {
 
 	private final int ZERO = 0;
+	private final int ONE = 1;
+	private final int TWO = 2;
 	private int numOfClauses;
 	private int numOfVariables;
 	private boolean hasEmptyClause; //to check if sat has an empty clause
@@ -122,17 +124,17 @@ public class SAT {
 			} else {
 
 				Clause newClause = new Clause();
-				newClause.appendVariable(clause.getVariable(0));
-				newClause.appendVariable(clause.getVariable(1));
+				newClause.appendVariable(clause.getVariable(ZERO));
+				newClause.appendVariable(clause.getVariable(ONE));
 				newClause.appendVariable(new Variable(this.getNumOfVariables() + offset));
 				newClause.appendVariable(null);
 
 				sat3.appendClause(newClause);
-				totalNumOfClauses += 1;
+				totalNumOfClauses += ONE;
 
 				int limit = numOfVariables - 1;
 
-				for (int j = 2; j < numOfVariables; j++) {
+				for (int j = TWO; j < numOfVariables; j++) {
 					newClause = new Clause();
 
 					int sum = this.getNumOfVariables() + offset++;
@@ -144,9 +146,18 @@ public class SAT {
 					newClause.appendVariable(clause.getVariable(j));
 
 					if (j < limit) {
-						sum = this.getNumOfVariables() + offset;
-						newClause.appendVariable(new Variable(sum));
-						sat3.setNumOfVariables(sum);
+						if (j != limit - 1) {
+							sum = this.getNumOfVariables() + offset;
+							newClause.appendVariable(new Variable(sum));
+							sat3.setNumOfVariables(sum);
+						} else {
+							j += ONE;
+							newClause.appendVariable(clause.getVariable(j));
+						}
+						//TODO
+						//sum = this.getNumOfVariables() + offset;
+						//newClause.appendVariable(new Variable(sum));
+						//sat3.setNumOfVariables(sum);
 					}
 
 					newClause.appendVariable(null);
