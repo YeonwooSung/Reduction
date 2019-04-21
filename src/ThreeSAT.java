@@ -12,6 +12,7 @@ public class ThreeSAT {
 	private final int ONE = 1;
 	private final int TWO = 2;
 	private final int THREE = 3;
+	private final int FOUR = 4;
 	private final String ZERO_STR = "0";
 
 	private int numOfClauses;
@@ -161,6 +162,16 @@ public class ThreeSAT {
 		pw.close(); //close the print writer
 	}
 
+	private void changeVariableValues() {
+		int numOfVariables = this.numOfVariables;
+		int newNumOfVariables = FOUR;
+		int start = numOfVariables + ONE; //starting index of the negative variable.
+
+		for (int i = ZERO; i < this.clauses.size(); i++) {
+			//
+		}
+	}
+
 	/**
 	 * This method converts the sat to kcol.
 	 *
@@ -170,10 +181,10 @@ public class ThreeSAT {
 	public KCol convertToKCol() throws Exception {
 		KCol kcol = new KCol();
 
-		//TODO
-		if (this.numOfVariables < 4) {
+		// since the k-col have solution iff the number of variables is less than 4, we need to check the number of variables
+		if (this.numOfVariables < FOUR) {
 			// if the number of variables is less than 4, add additional variables
-			//this.setNumOfVariables(4);
+			this.setNumOfVariables(4);
 		}
 
 		/*
@@ -195,7 +206,7 @@ public class ThreeSAT {
 			e.printStackTrace();
 		}
 
-		int limit = this.numOfVariables * 3;
+		int limit = this.numOfVariables * THREE;
 
 		// use for loop to check all variables
 		for (int i = ONE; i <= this.numOfVariables; i++) {
@@ -210,9 +221,12 @@ public class ThreeSAT {
 			// use for loop to connect vertex v and clique vertices.
 			for (int j = numOfVariables * TWO + ONE; j <= limit; j++) {
 				if (j != targetClique) {
-					Edge cliqueEdge = new Edge();
-					cliqueEdge.setEndPoints(i, j);
-					kcol.appendEdge(cliqueEdge);
+					Edge cliqueEdge1 = new Edge();
+					cliqueEdge1.setEndPoints(i, j);
+					kcol.appendEdge(cliqueEdge1);
+					Edge cliqueEdge2 = new Edge();
+					cliqueEdge2.setEndPoints(i + this.numOfVariables, j);
+					kcol.appendEdge(cliqueEdge2);
 				}
 			}
 		}
@@ -230,8 +244,8 @@ public class ThreeSAT {
 
 		HashMap<Integer, List<Integer>> hm = mapClausesToVariable();
 		limit = this.numOfVariables * TWO;
-		int minClauseNum = 3 * this.numOfVariables + ONE;
-		int maxClauseNum = 3 * this.numOfVariables + this.numOfClauses;
+		int minClauseNum = THREE * this.numOfVariables + ONE;
+		int maxClauseNum = THREE * this.numOfVariables + this.numOfClauses;
 
 		// use for loop to check all literals
 		for (int i = ONE; i <= limit; i++) {
