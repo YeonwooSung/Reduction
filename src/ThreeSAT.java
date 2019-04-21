@@ -162,16 +162,6 @@ public class ThreeSAT {
 		pw.close(); //close the print writer
 	}
 
-	private void changeVariableValues() {
-		int numOfVariables = this.numOfVariables;
-		int newNumOfVariables = FOUR;
-		int start = numOfVariables + ONE; //starting index of the negative variable.
-
-		for (int i = ZERO; i < this.clauses.size(); i++) {
-			//
-		}
-	}
-
 	/**
 	 * This method converts the sat to kcol.
 	 *

@@ -100,6 +100,7 @@ public class SAT {
 		int offset = 1;
 		sat3.setNumOfVariables(this.getNumOfVariables());
 
+		// use for loop to iterate the array of clauses
 		for (int i = 0; i < numOfClauses; i++) {
 			Clause clause = this.getClause(i);
 
@@ -123,6 +124,7 @@ public class SAT {
 
 			} else {
 
+				// make a new clause to store first 2 variables of the clause that includes more than 3 variables
 				Clause newClause = new Clause();
 				newClause.appendVariable(clause.getVariable(ZERO));
 				newClause.appendVariable(clause.getVariable(ONE));
@@ -134,6 +136,7 @@ public class SAT {
 
 				int limit = numOfVariables - 1;
 
+				// use for loop to store all remaining variables (variables except first 2 variables)
 				for (int j = TWO; j < numOfVariables; j++) {
 					newClause = new Clause();
 
@@ -146,7 +149,9 @@ public class SAT {
 					newClause.appendVariable(clause.getVariable(j));
 
 					if (j < limit) {
+						// check if the number of remaining variables
 						if (j != limit - 1) {
+							// if only 2 variables are remaining, make a clause store both of them
 							sum = this.getNumOfVariables() + offset;
 							newClause.appendVariable(new Variable(sum));
 							sat3.setNumOfVariables(sum);
@@ -158,7 +163,7 @@ public class SAT {
 
 					newClause.appendVariable(null);
 
-					totalNumOfClauses += 1;
+					totalNumOfClauses += 1; //increase the number of clauses
 					sat3.appendClause(newClause);
 				}
 			}
@@ -185,6 +190,7 @@ public class SAT {
 	public void printCNF(String fileName) {
 		PrintWriter pw = null;
 
+		// check if the file exist, and check if the fileName is null
 		if (fileName != null) {
 			try {
 				File file = new File(fileName);
@@ -193,6 +199,7 @@ public class SAT {
 				e.printStackTrace();
 			}
 		} else {
+			// if the fileName is null, use the standard output.
 			pw = new PrintWriter(System.out);
 		}
 
@@ -217,18 +224,20 @@ public class SAT {
 					sb.append(value);
 					sb.append(" ");
 
+					// check if the current literal is the last one of the current clause.
 					if (i == varArr.length - 1 && value != ZERO)
 						sb.append("0");
 					else if (value == ZERO) {
+						// check if this is an empty clause
 						this.setNumOfClauses(this.getNumOfClauses() + 1);
 					}
 				} else {
 					if (i != 0)
-						sb.append("0");
+						sb.append("0"); //append 0 as a terminator of the clause
 				}
 			}
 
-			pw.println(sb.toString());
+			pw.println(sb.toString()); //print out the result
 		}
 
 		pw.flush(); //flush the output
