@@ -264,7 +264,7 @@ public class ThreeSAT {
 							clauseEdge.setEndPoints(i, j);
 							kcol.appendEdge(clauseEdge);
 						} else {
-							throw new Exception(); //TODO
+							throw new Exception();
 						}
 					}
 				}
@@ -278,7 +278,7 @@ public class ThreeSAT {
 						clauseEdge.setEndPoints(i, j);
 						kcol.appendEdge(clauseEdge);
 					} else {
-						throw new Exception(); //TODO
+						throw new Exception();
 					}
 				}
 			}

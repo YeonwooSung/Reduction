@@ -32,13 +32,10 @@ public class ThreeSAT_To_KCol {
 			br.close();
 
 		} catch (FileNotFoundException e) {
-			e.printStackTrace(); //TODO
 			System.exit(ONE);
 		} catch (IOException | NumberFormatException e) {
-			e.printStackTrace(); //TODO
 			System.exit(ONE);
 		} catch (Exception e) {
-			e.printStackTrace(); //TODO
 			System.exit(ONE);
 		}
 	}
