@@ -190,12 +190,7 @@ public class ThreeSAT {
 		kcol.setNumOfNodes(numOfNodes);
 
 		try {
-			//kcol.setNumOfCol(numOfCol); //set the number of colours
-			if (this.numOfVariables < 4) {
-				kcol.setNumOfCol(5); //set the number of colours
-			} else {
-				kcol.setNumOfCol(numOfCol); //set the number of colours
-			}
+			kcol.setNumOfCol(numOfCol); //set the number of colours
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
