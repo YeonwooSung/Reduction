@@ -168,8 +168,14 @@ public class ThreeSAT_To_KCol {
 
 		ThreeSAT_To_KCol converter = new ThreeSAT_To_KCol(inputFile);
 		ThreeSAT sat3 = converter.getSatTHREE();
-		
-		KCol kcol = sat3.convertToKCol();
+
+		try {
+			KCol kcol = sat3.convertToKCol();
+			kcol.printKCol(outputFile);
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 
 		System.exit(0);
 	}

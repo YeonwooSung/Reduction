@@ -235,7 +235,7 @@ public class StraightforwardReduction {
 							tuple = endpoint + "," + startpoint;
 						}
 
-						if (!kcol.hasEndpoints(tuple)) //check if the kcol instance already has this edge
+						if (kcol.hasEndpoints(tuple)) //check if the kcol instance already has this edge
 							throw new IOException();
 
 						kcol.addEndpointTuple(tuple);

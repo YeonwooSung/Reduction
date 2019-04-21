@@ -27,6 +27,11 @@ public class KCol {
 		ids = new ArrayList<Integer>();
 	}
 
+	/**
+	 * This method converts the k-colourable problem to SAT problem.
+	 *
+	 * @return sat object
+	 */
 	public SAT convert_kcol_to_sat() {
 		SAT sat = new SAT();
 
@@ -128,13 +133,13 @@ public class KCol {
 	public boolean hasEndpoints(String endpoint) {
 		for (int i = 0; i < endpoints.size(); i++) {
 			if (endpoints.get(i).equals(endpoint)) {
-				return false;
+				return true;
 			}
 		}
 
 		endpoints.add(endpoint);
 
-		return true;
+		return false;
 	}
 
 	/**
@@ -309,14 +314,14 @@ public class KCol {
 				File file = new File(fileName);
 				pw = new PrintWriter(file);
 			} catch (FileNotFoundException e) {
-				e.printStackTrace(); //TODO
+				e.printStackTrace();
 			}
 		} else {
 			pw = new PrintWriter(System.out);
 		}
 
 		// print out the preamble section
-		pw.println("c kcoltosat");
+		pw.println("c threesattokcol");
 		pw.println("p edge " + this.numOfNodes + " " + this.numOfEdges);
 		pw.println("colours " + this.numOfCol);
 

@@ -170,6 +170,11 @@ public class SAT {
 		return hasEmptyClause;
 	}
 
+	/**
+	 * Print out the SAT with DIMACS CNF format.
+	 *
+	 * @param fileName The name of the output file.
+	 */
 	public void printCNF(String fileName) {
 		PrintWriter pw = null;
 
@@ -178,7 +183,7 @@ public class SAT {
 				File file = new File(fileName);
 				pw = new PrintWriter(file);
 			} catch (FileNotFoundException e) {
-				e.printStackTrace(); //TODO
+				e.printStackTrace();
 			}
 		} else {
 			pw = new PrintWriter(System.out);
