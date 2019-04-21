@@ -154,10 +154,6 @@ public class SAT {
 							j += ONE;
 							newClause.appendVariable(clause.getVariable(j));
 						}
-						//TODO
-						//sum = this.getNumOfVariables() + offset;
-						//newClause.appendVariable(new Variable(sum));
-						//sat3.setNumOfVariables(sum);
 					}
 
 					newClause.appendVariable(null);
