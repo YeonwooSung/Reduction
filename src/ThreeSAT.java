@@ -170,6 +170,11 @@ public class ThreeSAT {
 	public KCol convertToKCol() throws Exception {
 		KCol kcol = new KCol();
 
+		if (this.numOfVariables < 4) {
+			// if the number of variables is less than 4, add additional variables
+			this.setNumOfVariables(4);
+		}
+
 		/*
 		 * Assume we have n variables.
 		 * 1 to n for positive values of variables.
@@ -185,8 +190,6 @@ public class ThreeSAT {
 
 		try {
 			kcol.setNumOfCol(numOfCol); //set the number of colours
-
-			//TODO what if numOfVariables < 4 ??
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
