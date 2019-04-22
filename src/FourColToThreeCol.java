@@ -77,8 +77,6 @@ public class FourColToThreeCol {
 		connectByEdges(groundNode, d);
 		connectByEdges(startpoint, a1);
 		connectByEdges(startpoint2, a2);
-		connectByEdges(endpoint, a1);
-		connectByEdges(endpoint2, a2);
 		connectByEdges(a1, b1);
 		connectByEdges(a1, c1);
 		connectByEdges(a2, b2);
@@ -86,8 +84,6 @@ public class FourColToThreeCol {
 		connectByEdges(c1, d);
 		connectByEdges(c1, c2);
 		connectByEdges(c2, d);
-		connectByEdges(startpoint, b1);
-		connectByEdges(startpoint2, b2);
 		connectByEdges(endpoint, b1);
 		connectByEdges(endpoint2, b2);
 	}
