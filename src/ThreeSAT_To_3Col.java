@@ -6,8 +6,6 @@ public class ThreeSAT_To_3Col {
 	private static final int ONE = 1;
 	private static final int TWO = 2;
 	private static final int THREE = 3;
-	private static final int FOUR = 4;
-	private static final int FIVE = 5;
 
 	static KCol convert_3sat_to_3col(ThreeSAT sat3) throws IOException {
 		KCol col = new KCol();
@@ -111,9 +109,10 @@ public class ThreeSAT_To_3Col {
 		}
 
 		int count = clause.countVariables();
+		System.out.println("count: " + count);
 
 		// check if the clause has multiple variables
-		if (count > ONE) {
+		if (count > ZERO) {
 			value2 = clause.getVariable(ONE).getVar();
 
 			// check if the value2 is negative number
@@ -122,7 +121,7 @@ public class ThreeSAT_To_3Col {
 			}
 
 			// check if the clause has more than two variables
-			if (count > TWO) {
+			if (count > ONE) {
 				value3 = clause.getVariable(TWO).getVar();
 
 				// check if the value3 is negative number
@@ -130,22 +129,25 @@ public class ThreeSAT_To_3Col {
 					value3 = numOfVariables - value3;
 				}
 
-				//TODO
 				generateGadget(gadgetStart, value1, value2, clause, col);
-				gadgetStart += FIVE;
+				gadgetStart += THREE;
 				generateGadget(gadgetStart, gadgetStart, value3, clause, col);
-				gadgetStart += FIVE;
+				gadgetStart += THREE;
 
 				// connect end point of gadget with false
 				int falseNode = numOfVariables * TWO + TWO;
 
 				Edge gadgetEdge = new Edge();
 				gadgetEdge.setEndPoints(falseNode, gadgetStart);
+				col.appendEdge(gadgetEdge);
 
 				return 6;
 			}
 
 			generateGadget(gadgetStart, value1, value2, clause, col);
+			int falseNode = numOfVariables * TWO + TWO;
+			Edge gadgetEdge = new Edge();
+			gadgetEdge.setEndPoints(falseNode, gadgetStart);
 			return 3;
 		}
 
