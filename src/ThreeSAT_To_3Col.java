@@ -46,6 +46,9 @@ public class ThreeSAT_To_3Col {
 			e2.setEndPoints(i, baseNode);
 			e3.setEndPoints(negate, baseNode);
 
+			col.appendEdge(e1);
+			col.appendEdge(e2);
+			col.appendEdge(e3);
 			numOfNodes += THREE; //increase the num of nodes
 		}
 
@@ -172,6 +175,8 @@ public class ThreeSAT_To_3Col {
 		int gadgetNode1 = gadgetStart + ONE;
 		int gadgetNode2 = gadgetStart + TWO;
 		int gadgetNode3 = gadgetStart + THREE;
+
+		System.out.println(gadgetStart);
 
 		// make edges to connect gadget and literals
 		Edge gadgetEdge1 = new Edge();
