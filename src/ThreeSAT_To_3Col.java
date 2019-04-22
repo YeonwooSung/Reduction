@@ -49,7 +49,7 @@ public class ThreeSAT_To_3Col {
 			col.appendEdge(e1);
 			col.appendEdge(e2);
 			col.appendEdge(e3);
-			numOfNodes += THREE; //increase the num of nodes
+			numOfNodes += TWO; //increase the num of nodes
 		}
 
 		Clause[] clauses = sat3.getClauses();
@@ -63,7 +63,7 @@ public class ThreeSAT_To_3Col {
 				numOfGadget += ret;
 			} else {
 				if (sat3.checkIfHasEmptyClause()) {
-					int gadgetNode = numOfGadget + ONE;
+					int gadgetNode = limit + limit + THREE + numOfGadget + ONE;
 					numOfGadget += 1;
 
 					Edge gadgetEdgeEmptyClause1 = new Edge();
@@ -144,7 +144,7 @@ public class ThreeSAT_To_3Col {
 
 				return 6;
 			}
-			
+
 			generateGadget(gadgetStart, value1, value2, clause, col);
 			return 3;
 		}
@@ -155,7 +155,7 @@ public class ThreeSAT_To_3Col {
 		int baseNode = numOfVariables * 2 + THREE;
 		Edge gadgetEdge2 = new Edge();
 		gadgetEdge2.setEndPoints(baseNode, gadgetNode1);
-		
+
 		col.appendEdge(gadgetEdge1);
 		col.appendEdge(gadgetEdge2);
 
@@ -175,8 +175,6 @@ public class ThreeSAT_To_3Col {
 		int gadgetNode1 = gadgetStart + ONE;
 		int gadgetNode2 = gadgetStart + TWO;
 		int gadgetNode3 = gadgetStart + THREE;
-
-		//System.out.println(gadgetStart);
 
 		// make edges to connect gadget and literals
 		Edge gadgetEdge1 = new Edge();
