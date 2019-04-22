@@ -19,7 +19,7 @@ copy_file:
 	chmod +x sattothreesat
 	chmod +x coltosat
 	chmod +x threesattocol
-	chmode +x threesattothreecol
+	chmod +x threesattothreecol
 
 clean:
 	rm -rf *.class
