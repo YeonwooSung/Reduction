@@ -50,7 +50,7 @@ public class FourColToThreeCol {
 
 		// iterate array of edges to make edge gadgets for all edges
 		for (Edge edge : edges) {
-			generateEdgeGadget(edge, numOfNodes, groundNode);
+			generateEdgeGadget(edge, numOfNodes, groundNode, nodeNum);
 			numOfNodes += SEVEN;
 		}
 
@@ -60,9 +60,11 @@ public class FourColToThreeCol {
 		isConverted = true;
 	}
 
-	private void generateEdgeGadget(Edge e, int numOfNodes, int groundNode) {
+	private void generateEdgeGadget(Edge e, int numOfNodes, int groundNode, int nodeNum) {
 		int startpoint = e.getStartPoint();
 		int endpoint = e.getEndPoint();
+		int startpoint2 = startpoint + nodeNum;
+		int endpoint2 = endpoint + nodeNum;
 
 		int a1 = numOfNodes + ONE;
 		int a2 = a1 + ONE;
@@ -74,7 +76,9 @@ public class FourColToThreeCol {
 
 		connectByEdges(groundNode, d);
 		connectByEdges(startpoint, a1);
-		connectByEdges(endpoint, a2);
+		connectByEdges(startpoint2, a2);
+		connectByEdges(endpoint, a1);
+		connectByEdges(endpoint2, a2);
 		connectByEdges(a1, b1);
 		connectByEdges(a1, c1);
 		connectByEdges(a2, b2);
@@ -83,7 +87,9 @@ public class FourColToThreeCol {
 		connectByEdges(c1, c2);
 		connectByEdges(c2, d);
 		connectByEdges(startpoint, b1);
-		connectByEdges(endpoint, b2);
+		connectByEdges(startpoint2, b2);
+		connectByEdges(endpoint, b1);
+		connectByEdges(endpoint2, b2);
 	}
 
 	private void connectByEdges(int vertex1, int vertex2) {
