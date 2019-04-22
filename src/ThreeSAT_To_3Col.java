@@ -176,7 +176,7 @@ public class ThreeSAT_To_3Col {
 		int gadgetNode2 = gadgetStart + TWO;
 		int gadgetNode3 = gadgetStart + THREE;
 
-		System.out.println(gadgetStart);
+		//System.out.println(gadgetStart);
 
 		// make edges to connect gadget and literals
 		Edge gadgetEdge1 = new Edge();
