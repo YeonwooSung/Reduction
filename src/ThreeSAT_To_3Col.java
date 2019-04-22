@@ -66,6 +66,8 @@ public class ThreeSAT_To_3Col {
 		}
 
 		numOfNodes += numOfGadget;
+		col.setNumOfNodes(numOfNodes);
+		col.setNumOfEdges(col.countEdges());
 
 		return col;
 	}
