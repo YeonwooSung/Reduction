@@ -173,7 +173,7 @@ public class ThreeSAT_To_KCol {
 		}
 
 		// if the first command line argument is just "test", then this program will execute the test mode
-		if (inputFile.equals("test")) {
+		if (inputFile != null && inputFile.equals("test")) {
 
 			/*
 			 * With the test mode, this program will do the reduction multiple times to convert all
