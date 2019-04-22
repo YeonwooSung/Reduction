@@ -26,6 +26,14 @@ public class ThreeSAT {
 	}
 
 	/**
+	 * Get the array of clauses.
+	 * @return Clause array
+	 */
+	public Clause[] getClauses() {
+		return clauses.stream().toArray(Clause[]::new);
+	}
+
+	/**
 	 * Append the clause to the list of clauses.
 	 *
 	 * @param clause
@@ -38,7 +46,7 @@ public class ThreeSAT {
 	 * Print out clauses.
 	 */
 	public void printClauses() {
-		Clause[] clauseArr = clauses.stream().toArray(Clause[]::new);
+		Clause[] clauseArr = getClauses();
 
 		for (Clause c : clauseArr) {
 			c.printVariables();

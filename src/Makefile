@@ -11,15 +11,19 @@ copy_file:
 	chmod +x exe_a.sh
 	chmod +x exe_b.sh
 	chmod +x exe_c.sh
+	chmod +x exe_d.sh
 	cp exe_a.sh sattothreesat
 	cp exe_b.sh coltosat
 	cp exe_c.sh threesattocol
+	cp exe_d.sh threesattothreecol
 	chmod +x sattothreesat
 	chmod +x coltosat
 	chmod +x threesattocol
+	chmode +x threesattothreecol
 
 clean:
 	rm -rf *.class
 	rm sattothreesat
 	rm coltosat
 	rm threesattocol
+	rm threesattothreecol
