@@ -4,8 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class StraightforwardReduction {
@@ -179,6 +177,9 @@ public class StraightforwardReduction {
 
 						} else {
 							hasEmptyClause = false;
+							if (literal.equals(""))
+								continue;
+
 							int l = Integer.parseInt(literal);
 
 							// check if the literal is in the valid range
