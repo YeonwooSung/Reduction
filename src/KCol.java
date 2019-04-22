@@ -27,6 +27,9 @@ public class KCol {
 		ids = new ArrayList<Integer>();
 	}
 
+	public Edge[] getEdges() {
+		return edges.stream().toArray(Edge[]::new);
+	}
 	/**
 	 * This method converts the k-colourable problem to SAT problem.
 	 *

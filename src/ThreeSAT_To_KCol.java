@@ -21,8 +21,6 @@ public class ThreeSAT_To_KCol {
 	private final int THREE = 3;
 	private final int FOUR = 4;
 
-	private static final String[] listOfFiles = {"aim-50-1_6-yes1-4_3sat.cnf", "aim-100-1_6-no-1_3sat.cnf"};
-	private static final String[] listOfOutput = {"aim-50-1_6-yes1-4.col", "aim-100-1_6-no-1.col"};
 
 	ThreeSAT_To_KCol(String fileName) {
 		try {
@@ -159,7 +157,7 @@ public class ThreeSAT_To_KCol {
 	}
 
 	/*
-	 * TODO comments
+	 * Reduction from 3-sat to k-colourability.
 	 */
 	public static void main(String[] args) {
 		String inputFile = null;
@@ -172,59 +170,15 @@ public class ThreeSAT_To_KCol {
 			}
 		}
 
-		// if the first command line argument is just "test", then this program will execute the test mode
-		if (inputFile != null && inputFile.equals("test")) {
+		ThreeSAT_To_KCol converter = new ThreeSAT_To_KCol(inputFile);
+		ThreeSAT sat3 = converter.getSatTHREE();
 
-			/*
-			 * With the test mode, this program will do the reduction multiple times to convert all
-			 * given test input files.
-			 *
-			 * Everytime it finishes a single reduction, this program will write a new line to the
-			 * csv file
-			 */
-
-			try {
-				//clears file every time
-				Writer output = new BufferedWriter(new FileWriter("threesattokcol.csv", true));
-
-				for (int i = 0; i < listOfFiles.length; i++) {
-					long startTime = System.currentTimeMillis(); //to count the run time
-
-					ThreeSAT_To_KCol converter = new ThreeSAT_To_KCol(listOfFiles[i]);
-					ThreeSAT sat3 = converter.getSatTHREE();
-
-					int clauses = sat3.getNumOfClauses();
-					int variables = sat3.getNumOfVariables();
-
-					try {
-						KCol kcol = sat3.convertToKCol();
-						kcol.printKCol(listOfOutput[i]);
-					} catch(Exception e) {
-						e.printStackTrace();
-						System.exit(1);
-					}
-
-					long endTime = System.currentTimeMillis(); //to count the run time
-					long totalTime = endTime - startTime;
-
-					output.append("\n" + clauses + "," + variables + "," + totalTime);
-				}
-				output.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-		} else {
-			ThreeSAT_To_KCol converter = new ThreeSAT_To_KCol(inputFile);
-			ThreeSAT sat3 = converter.getSatTHREE();
-
-			try {
-				KCol kcol = sat3.convertToKCol();
-				kcol.printKCol(outputFile);
-			} catch(Exception e) {
-				e.printStackTrace();
-				System.exit(1);
-			}
+		try {
+			KCol kcol = sat3.convertToKCol();
+			kcol.printKCol(outputFile);
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.exit(1);
 		}
 
 		System.exit(0);

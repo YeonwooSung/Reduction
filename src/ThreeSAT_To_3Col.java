@@ -204,6 +204,9 @@ public class ThreeSAT_To_3Col {
 		col.appendEdge(cliqueEdge3);
 	}
 
+	/*
+	 * Reduction from 3-sat to 3-colourability
+	 */
 	public static void main(String[] args) {
 		String inputFile = null;
 		String outputFile = null;

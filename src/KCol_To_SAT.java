@@ -2,10 +2,9 @@
 public class KCol_To_SAT {
 
 	/*
-	 * TODO comment!
+	 * Reduction from K-colourable to SAT.
 	 */
 	public static void main(String[] args) {
-		//TODO file name, command line arguments
 		String inputFile = null;
 		String outputFile = null;
 
@@ -16,9 +15,9 @@ public class KCol_To_SAT {
 			}
 		}
 
-		StraightforwardReduction reduction2 = new StraightforwardReduction(inputFile);
+		StraightforwardReduction reduction = new StraightforwardReduction(inputFile);
 
-		KCol kcol = reduction2.getKCol();
+		KCol kcol = reduction.getKCol();
 		SAT newsat = kcol.convert_kcol_to_sat();
 		newsat.printCNF(outputFile);
 
